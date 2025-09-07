@@ -413,7 +413,8 @@ Stay brief and caring.`
           stats[key] += score;
           totalScore += score;
         });
-        sentimentCounts[entry.analysis.sentiment] = (sentimentCounts[entry.analysis.sentiment] || 0) + 1;
+        const sentiment = entry.analysis.sentiment as Sentiment;
+        sentimentCounts[sentiment] = (sentimentCounts[sentiment] || 0) + 1;
       }
     });
 
