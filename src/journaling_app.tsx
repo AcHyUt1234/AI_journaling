@@ -235,7 +235,7 @@ SPIRITUAL INSIGHTS:
     "What would make tomorrow better?"
   ];
 
-  const analyzeEntryForInsights = async (entry) => {
+  const analyzeEntryForInsights = async (entry: string) => {
     try {
       const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
