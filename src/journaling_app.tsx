@@ -390,7 +390,7 @@ Stay brief and caring.`
     const filteredHistory = getFilteredHistory();
     if (filteredHistory.length < 5) return null;
 
-    const stats = {
+    const stats: Record<string, number> = {
       relationship: 0,
       money: 0, 
       health: 0,
