@@ -398,7 +398,12 @@ Stay brief and caring.`
       job: 0
     };
 
-    let sentimentCounts = { positive: 0, neutral: 0, negative: 0 };
+    type Sentiment = 'positive' | 'neutral' | 'negative';
+    const sentimentCounts: Record<Sentiment, number> = {
+      positive: 0,
+      neutral: 0,
+      negative: 0,
+    };
     let totalScore = 0;
 
     filteredHistory.forEach(entry => {
