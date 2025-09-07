@@ -85,7 +85,7 @@ const AIJournalingTool = () => {
     }));
   };
 
-  const loadUserJournalData = (username) => {
+  const loadUserJournalData = (username: string) => {
     if (userDatabase[username]?.journalHistory) {
       setJournalHistory(userDatabase[username].journalHistory);
     } else {
