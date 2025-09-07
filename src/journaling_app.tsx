@@ -43,6 +43,7 @@ const AIJournalingTool = () => {
   interface UserData {
   journalHistory: any[]; // refine type if possible
   lastActive: string;
+  password: string;
   // add other user data fields as needed 
   }
   const [userDatabase, setUserDatabase] = useState<Record<string, UserData>>({});
