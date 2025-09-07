@@ -135,6 +135,7 @@ const AIJournalingTool = () => {
         username: authForm.username,
         password: authForm.password, // In a real app, this would be hashed
         createdAt: new Date().toISOString(),
+        lastActive: new Date().toISOString(),
         journalHistory: []
       };
 
