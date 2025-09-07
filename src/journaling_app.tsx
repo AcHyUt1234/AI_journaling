@@ -87,7 +87,7 @@ const AIJournalingTool = () => {
     }
   }, [journalHistory, currentUser]);
 
-  const saveUserJournalData = (username: string, data: any[]) => {
+  const saveUserJournalData = (username: string, data: JournalEntry[]) => {
     setUserDatabase(prev => ({
       ...prev,
       [username]: {
