@@ -381,7 +381,7 @@ Stay brief and caring.`
     
     const now = new Date();
     const daysBack = selectedTimeframe === 'week' ? 7 : selectedTimeframe === 'month' ? 30 : 7;
-    const cutoffDate = new Date(now - daysBack * 24 * 60 * 60 * 1000);
+    const cutoffDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
     
     return journalHistory.filter(entry => new Date(entry.fullDate) >= cutoffDate);
   };
