@@ -28,7 +28,12 @@ const AIJournalingTool = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('all');
 
   // Mock user database - in a real app, this would be a proper database
-  const [userDatabase, setUserDatabase] = useState({});
+  interface UserData {
+  journalHistory: any[]; // refine type if possible
+  lastActive: string;
+  // add other user data fields as needed 
+  }
+  const [userDatabase, setUserDatabase] = useState<Record<string, UserData>>({});
 
   // Load user data on component mount
   useEffect(() => {
