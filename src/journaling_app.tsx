@@ -287,7 +287,7 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
     }
   };
 
-  const analyzeEntry = async (entry) => {
+  const analyzeEntry = async (entry: string) => {
     setIsLoading(true);
     
     try {
