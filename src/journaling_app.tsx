@@ -5,6 +5,18 @@ interface User {
   username: string;
 }
 
+interface JournalEntry {
+  id: number;
+  date: string;
+  time: string;
+  dayOfWeek: string;
+  fullDate: string;
+  entry: string;
+  guidance: string;
+  mood: string;
+  analysis: any;
+}
+
 const AIJournalingTool = () => {
   // Authentication state
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -18,7 +30,7 @@ const AIJournalingTool = () => {
   const [journalEntry, setJournalEntry] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [journalHistory, setJournalHistory] = useState([]);
+  const [journalHistory, setJournalHistory] = useState<JournalEntry[]>([]);
   const [currentMood, setCurrentMood] = useState('');
   const [showHistory, setShowHistory] = useState(false);
   const [activeTab, setActiveTab] = useState('write');
