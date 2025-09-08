@@ -440,7 +440,7 @@ Stay brief and caring.`
     };
   };
 
-  const calculateTrend = (entries) => {
+  const calculateTrend = (entries: JournalEntry[]) => {
     if (entries.length < 4) return 'stable';
     
     const recent = entries.slice(0, Math.ceil(entries.length/2));
