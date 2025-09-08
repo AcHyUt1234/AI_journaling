@@ -425,8 +425,8 @@ Stay brief and caring.`
     });
 
     const dominantSentiment = Object.keys(sentimentCounts).reduce((a, b) => 
-      sentimentCounts[a] > sentimentCounts[b] ? a : b
-    );
+      sentimentCounts[a as Sentiment] > sentimentCounts[b as Sentiment] ? a : b
+    ) as Sentiment;
 
     const topConcern = Object.keys(avgStats).reduce((a, b) => avgStats[a] > avgStats[b] ? a : b);
 
