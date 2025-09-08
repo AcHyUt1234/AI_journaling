@@ -466,7 +466,7 @@ Stay brief and caring.`
     }
   };
 
-  const handleAuthKeyPress = (e) => {
+  const handleAuthKeyPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       handleAuth();
     }
