@@ -419,7 +419,7 @@ Stay brief and caring.`
     });
 
     // Calculate averages and percentages
-    const avgStats = {};
+    const avgStats: Record<string, number> = {};
     Object.keys(stats).forEach(key => {
       avgStats[key] = Math.round((stats[key] / filteredHistory.length) * 10) / 10;
     });
