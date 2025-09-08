@@ -624,7 +624,7 @@ Stay brief and caring.`
               <h1 className="text-3xl font-bold text-gray-800">Mindful Journal</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Welcome, {currentUser.username ?? 'Guest'}</span>
+              {currentUser && (<span className="text-sm text-gray-600">Welcome, {currentUser.username ?? 'Guest'}</span>)}
               <button
                 onClick={handleLogout}
                 className="flex items-center px-3 py-1.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
