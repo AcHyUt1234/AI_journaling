@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AIJournalingTool from "./journaling_app";
 import ApiTest from "./ApiTest";
 
 function App() {
-  // Simple routing - check URL path
-  const path = window.location.pathname;
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
-  // Test page for debugging API
-  if (path === "/api-test") {
+  // Listen for URL changes
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setCurrentPath(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
+
+  // Test page
+  if (currentPath === "/api-test") {
     return <ApiTest />;
   }
 
