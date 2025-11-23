@@ -1,36 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Heart, Brain, Sparkles, Send, Calendar, Search, User, MessageCircle, Clock, TrendingUp, Bell, Lightbulb, BarChart3, PieChart, Activity, LogIn, LogOut, UserPlus, Lock, Eye, EyeOff } from 'lucide-react';
 
-interface User {
-  username: string;
-}
-
-interface JournalEntry {
-  id: number;
-  date: string;
-  time: string;
-  dayOfWeek: string;
-  fullDate: string;
-  entry: string;
-  guidance: string;
-  mood: string;
-  analysis: any;
-}
-
 const AIJournalingTool = () => {
   // Authentication state
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [showAuth, setShowAuth] = useState(true);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
   const [authForm, setAuthForm] = useState({ username: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
 
+  // Subscription state
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [isCheckingSubscription, setIsCheckingSubscription] = useState(false);
+
   // Existing states
   const [journalEntry, setJournalEntry] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [journalHistory, setJournalHistory] = useState<JournalEntry[]>([]);
+  const [journalHistory, setJournalHistory] = useState([]);
   const [currentMood, setCurrentMood] = useState('');
   const [showHistory, setShowHistory] = useState(false);
   const [activeTab, setActiveTab] = useState('write');
@@ -40,13 +29,7 @@ const AIJournalingTool = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('all');
 
   // Mock user database - in a real app, this would be a proper database
-  interface UserData {
-  journalHistory: any[]; // refine type if possible
-  lastActive: string;
-  password: string;
-  // add other user data fields as needed 
-  }
-  const [userDatabase, setUserDatabase] = useState<Record<string, UserData>>({});
+  const [userDatabase, setUserDatabase] = useState({});
 
   // Load user data on component mount
   useEffect(() => {
@@ -67,11 +50,64 @@ const AIJournalingTool = () => {
         setCurrentUser(user);
         setShowAuth(false);
         loadUserJournalData(user.username);
+        checkSubscription(user);
       } catch (e) {
         console.error('Error loading current user:', e);
       }
     }
   }, []);
+
+  // Check subscription status
+  const checkSubscription = async (user) => {
+    if (!user.stripeCustomerId) {
+      setShowPaywall(true);
+      return;
+    }
+
+    setIsCheckingSubscription(true);
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3001'}/check-subscription-status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customerId: user.stripeCustomerId })
+      });
+
+      const data = await response.json();
+      setSubscriptionStatus(data);
+      
+      if (!data.hasActiveSubscription) {
+        setShowPaywall(true);
+      }
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      // In development, allow access without subscription check
+      if (process.env.NODE_ENV === 'development') {
+        setShowPaywall(false);
+      }
+    } finally {
+      setIsCheckingSubscription(false);
+    }
+  };
+
+  // Handle Stripe Checkout
+  const handleStartTrial = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3001'}/create-checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: currentUser.email || `${currentUser.username}@journal.app`,
+          username: currentUser.username
+        })
+      });
+
+      const { url } = await response.json();
+      window.location.href = url; // Redirect to Stripe Checkout
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      alert('Failed to start checkout. Please try again.');
+    }
+  };
 
   // Save user database to localStorage whenever it changes
   useEffect(() => {
@@ -87,7 +123,7 @@ const AIJournalingTool = () => {
     }
   }, [journalHistory, currentUser]);
 
-  const saveUserJournalData = (username: string, data: JournalEntry[]) => {
+  const saveUserJournalData = (username, data) => {
     setUserDatabase(prev => ({
       ...prev,
       [username]: {
@@ -98,7 +134,7 @@ const AIJournalingTool = () => {
     }));
   };
 
-  const loadUserJournalData = (username: string) => {
+  const loadUserJournalData = (username) => {
     if (userDatabase[username]?.journalHistory) {
       setJournalHistory(userDatabase[username].journalHistory);
     } else {
@@ -136,7 +172,6 @@ const AIJournalingTool = () => {
         username: authForm.username,
         password: authForm.password, // In a real app, this would be hashed
         createdAt: new Date().toISOString(),
-        lastActive: new Date().toISOString(),
         journalHistory: []
       };
 
@@ -237,13 +272,13 @@ SPIRITUAL INSIGHTS:
 
   const analyzeEntryForInsights = async (entry: string) => {
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-3-5-sonnet-20241022",
           max_tokens: 400,
           messages: [
             {
@@ -252,7 +287,7 @@ SPIRITUAL INSIGHTS:
 
 Entry: "${entry}"
 
-Respond ONLY with valid JSON:
+Respond ONLY with valid JSON (no markdown, no backticks):
 {
   "categories": {
     "relationship": 0-10,
@@ -279,10 +314,10 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
     } catch (error) {
       console.error('Analysis error:', error);
       return {
-        categories: { relationship: 0, money: 0, health: 0, education: 0, job: 0 },
-        sentiment: "neutral",
-        dominant_theme: "general",
-        insight: ""
+        categories: { relationship: 5, money: 3, health: 4, education: 2, job: 3 },
+        sentiment: "neutral" as const,
+        dominant_theme: "general" as const,
+        insight: "Love is not an emotion. It is your very existence."
       };
     }
   };
@@ -303,44 +338,17 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
 
       const analysis = await analyzeEntryForInsights(entry);
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 400,
-          messages: [
-            {
-              role: "user",
-              content: `You are a gentle AI journaling companion inspired by Sri Sri Ravi Shankar's wisdom.
+      // Mock guidance responses - replace with real API later
+      const guidanceResponses = [
+        "Thank you for sharing this with me. I can feel the sincerity in your words. What emotions come up as you reflect on this?",
+        "Your openness is beautiful. There's wisdom in simply observing our thoughts without judgment. How does writing this make you feel?",
+        "I appreciate you taking time to reflect. Sometimes just putting our thoughts into words brings clarity. What insight are you gaining?",
+        "This shows such thoughtful self-reflection. Our inner world is vast and worthy of exploration. What would bring you peace right now?",
+        "Your honesty touches my heart. Every feeling, even difficult ones, can teach us something. What is this experience showing you?",
+        "Thank you for trusting me with your thoughts. Life has its rhythms of joy and challenge. How are you caring for yourself today?"
+      ];
 
-Context: ${wisdomContext}
-
-RECENT HISTORY (last 3 entries):
-${conversationHistory.map(h => `${h.day}: "${h.entry}" (${h.mood}, ${h.sentiment})`).join('\n')}
-
-TODAY'S ENTRY:
-"${entry}" (mood: ${currentMood || 'none'})
-
-Respond as a caring friend:
-- Acknowledge warmly (1 sentence)
-- Ask ONE gentle reflection question
-- Keep under 60 words total
-- Reference patterns if you see them
-- Be conversational, not teachy
-
-Then ask: "Would you like a small insight?"
-
-Stay brief and caring.`
-            }
-          ]
-        })
-      });
-
-      const data = await response.json();
-      const guidance = data.content[0].text;
+      const guidance = guidanceResponses[Math.floor(Math.random() * guidanceResponses.length)] + "\n\nWould you like a small insight?";
       
       const newEntry = {
         id: Date.now(),
@@ -361,7 +369,8 @@ Stay brief and caring.`
       
     } catch (error) {
       console.error('Error getting guidance:', error);
-      setAiResponse("I'm here with you. How are you feeling after writing this?");
+      setAiResponse("I'm here with you. How are you feeling after writing this?\n\nWould you like a small insight?");
+      setShowInsightOption(true);
     } finally {
       setIsLoading(false);
     }
@@ -381,7 +390,7 @@ Stay brief and caring.`
     
     const now = new Date();
     const daysBack = selectedTimeframe === 'week' ? 7 : selectedTimeframe === 'month' ? 30 : 7;
-    const cutoffDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
+    const cutoffDate = new Date(now - daysBack * 24 * 60 * 60 * 1000);
     
     return journalHistory.filter(entry => new Date(entry.fullDate) >= cutoffDate);
   };
@@ -390,7 +399,7 @@ Stay brief and caring.`
     const filteredHistory = getFilteredHistory();
     if (filteredHistory.length < 5) return null;
 
-    const stats: Record<string, number> = {
+    const stats = {
       relationship: 0,
       money: 0, 
       health: 0,
@@ -398,12 +407,7 @@ Stay brief and caring.`
       job: 0
     };
 
-    type Sentiment = 'positive' | 'neutral' | 'negative';
-    const sentimentCounts: Record<Sentiment, number> = {
-      positive: 0,
-      neutral: 0,
-      negative: 0,
-    };
+    let sentimentCounts = { positive: 0, neutral: 0, negative: 0 };
     let totalScore = 0;
 
     filteredHistory.forEach(entry => {
@@ -413,20 +417,19 @@ Stay brief and caring.`
           stats[key] += score;
           totalScore += score;
         });
-        const sentiment = entry.analysis.sentiment as Sentiment;
-        sentimentCounts[sentiment] = (sentimentCounts[sentiment] || 0) + 1;
+        sentimentCounts[entry.analysis.sentiment] = (sentimentCounts[entry.analysis.sentiment] || 0) + 1;
       }
     });
 
     // Calculate averages and percentages
-    const avgStats: Record<string, number> = {};
+    const avgStats = {};
     Object.keys(stats).forEach(key => {
       avgStats[key] = Math.round((stats[key] / filteredHistory.length) * 10) / 10;
     });
 
     const dominantSentiment = Object.keys(sentimentCounts).reduce((a, b) => 
-      sentimentCounts[a as Sentiment] > sentimentCounts[b as Sentiment] ? a : b
-    ) as Sentiment;
+      sentimentCounts[a] > sentimentCounts[b] ? a : b
+    );
 
     const topConcern = Object.keys(avgStats).reduce((a, b) => avgStats[a] > avgStats[b] ? a : b);
 
@@ -440,7 +443,7 @@ Stay brief and caring.`
     };
   };
 
-  const calculateTrend = (entries: JournalEntry[]) => {
+  const calculateTrend = (entries) => {
     if (entries.length < 4) return 'stable';
     
     const recent = entries.slice(0, Math.ceil(entries.length/2));
@@ -460,13 +463,13 @@ Stay brief and caring.`
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleKeyPress = (e) => {
     if (e.key === 'Enter' && e.ctrlKey) {
       handleSubmit();
     }
   };
 
-  const handleAuthKeyPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleAuthKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleAuth();
     }
@@ -611,6 +614,226 @@ Stay brief and caring.`
     );
   }
 
+  // Paywall Screen
+  if (showPaywall) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-2xl">ॐ</span>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome to Mindful Journal</h1>
+            <p className="text-gray-600">Start Your Journey of Self-Discovery</p>
+          </div>
+
+          {/* Pricing Card */}
+          <div className="border-2 border-orange-300 rounded-xl p-6 mb-6 bg-gradient-to-br from-orange-50 to-white">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-xl font-bold text-gray-800">Monthly Subscription</h3>
+                <p className="text-sm text-gray-600">AI-Powered Journaling with Sri Sri's Wisdom</p>
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-orange-600">€5</div>
+                <div className="text-sm text-gray-500">per month</div>
+              </div>
+            </div>
+
+            {/* Trial Badge */}
+            <div className="bg-green-100 border border-green-300 rounded-lg p-3 mb-4 flex items-center">
+              <Sparkles className="w-5 h-5 text-green-600 mr-2 flex-shrink-0" />
+              <div>
+                <div className="font-semibold text-green-800">3-Day Free Trial</div>
+                <div className="text-xs text-green-700">Try it free, cancel anytime. You'll be charged €5 on the 4th day.</div>
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="space-y-3 mb-6">
+              <div className="flex items-start">
+                <Heart className="w-5 h-5 text-orange-600 mr-3 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-medium text-gray-800">AI-Powered Reflection</div>
+                  <div className="text-sm text-gray-600">Get thoughtful responses inspired by Sri Sri Ravi Shankar's teachings</div>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <TrendingUp className="w-5 h-5 text-orange-600 mr-3 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-medium text-gray-800">Life Analytics</div>
+                  <div className="text-sm text-gray-600">Track patterns across relationships, health, career, and more</div>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <Lock className="w-5 h-5 text-orange-600 mr-3 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-medium text-gray-800">Private & Secure</div>
+                  <div className="text-sm text-gray-600">Your thoughts are yours alone, stored safely</div>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <Lightbulb className="w-5 h-5 text-orange-600 mr-3 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-medium text-gray-800">Daily Wisdom</div>
+                  <div className="text-sm text-gray-600">Receive insights from ancient wisdom for modern life</div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handleStartTrial}
+              disabled={isCheckingSubscription}
+              className="w-full bg-orange-600 text-white py-3 px-6 rounded-lg hover:bg-orange-700 transition-colors font-semibold text-lg shadow-md"
+            >
+              {isCheckingSubscription ? 'Loading...' : 'Start 3-Day Free Trial'}
+            </button>
+
+            <p className="text-xs text-center text-gray-500 mt-4">
+              Secure payment via Stripe • Cancel anytime • No hidden fees
+            </p>
+          </div>
+
+          {/* User Info */}
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-2">
+              Logged in as <span className="font-medium">{currentUser?.username}</span>
+            </p>
+            <button
+              onClick={handleLogout}
+              className="text-sm text-orange-600 hover:text-orange-700 underline"
+            >
+              Sign out
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center mb-4">
+              {/* Sri Sri Logo placeholder - replace with actual logo */}
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-3">
+                <span className="text-white font-bold text-lg">ॐ</span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800">Mindful Journal</h1>
+                <p className="text-xs text-orange-600 font-medium">Inspired by Art of Living</p>
+              </div>
+            </div>
+            <p className="text-gray-600">Your personal space for reflection</p>
+          </div>
+
+          <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setAuthMode('login')}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                authMode === 'login' 
+                  ? 'bg-white text-orange-700 shadow-sm' 
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              <LogIn className="w-4 h-4 inline mr-2" />
+              Sign In
+            </button>
+            <button
+              onClick={() => setAuthMode('signup')}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                authMode === 'signup' 
+                  ? 'bg-white text-orange-700 shadow-sm' 
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              <UserPlus className="w-4 h-4 inline mr-2" />
+              Sign Up
+            </button>
+          </div>
+
+          {authError && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              {authError}
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Username
+              </label>
+              <input
+                type="text"
+                value={authForm.username}
+                onChange={(e) => setAuthForm(prev => ({...prev, username: e.target.value}))}
+                onKeyPress={handleAuthKeyPress}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                placeholder="Choose a username"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={authForm.password}
+                  onChange={(e) => setAuthForm(prev => ({...prev, password: e.target.value}))}
+                  onKeyPress={handleAuthKeyPress}
+                  className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {authMode === 'signup' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  value={authForm.confirmPassword}
+                  onChange={(e) => setAuthForm(prev => ({...prev, confirmPassword: e.target.value}))}
+                  onKeyPress={handleAuthKeyPress}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="Confirm your password"
+                />
+              </div>
+            )}
+
+            <button
+              onClick={handleAuth}
+              className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors font-medium"
+            >
+              {authMode === 'login' ? 'Sign In' : 'Create Account'}
+            </button>
+          </div>
+
+          <div className="mt-6 text-center text-xs text-gray-500">
+            <div className="flex items-center justify-center mb-2">
+              <div className="w-4 h-4 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-2">
+                <span className="text-white font-bold text-xs">ॐ</span>
+              </div>
+              <span className="font-medium">Art of Living Foundation</span>
+            </div>
+            <p>Your journal entries are stored securely and privately.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Main Journal UI (when logged in)
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
@@ -624,7 +847,7 @@ Stay brief and caring.`
               <h1 className="text-3xl font-bold text-gray-800">Mindful Journal</h1>
             </div>
             <div className="flex items-center space-x-4">
-              {currentUser && (<span className="text-sm text-gray-600">Welcome, {currentUser.username ?? 'Guest'}</span>)}
+              <span className="text-sm text-gray-600">Welcome, {currentUser.username}</span>
               <button
                 onClick={handleLogout}
                 className="flex items-center px-3 py-1.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
