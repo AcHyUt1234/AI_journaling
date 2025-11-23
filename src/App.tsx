@@ -7,7 +7,7 @@ function App() {
   const path = window.location.pathname;
 
   // Test page for debugging API
-  if (path === "/api-test") {
+  if (path === "/ApiTest.tsx") {
     return <ApiTest />;
   }
 
