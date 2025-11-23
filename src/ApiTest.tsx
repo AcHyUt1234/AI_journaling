@@ -1,0 +1,314 @@
+// src/ApiTest.tsx
+// Test page to debug your API endpoint
+
+import React, { useState } from 'react';
+
+const ApiTest = () => {
+  const [response, setResponse] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [logs, setLogs] = useState<string[]>([]);
+
+  const addLog = (message: string) => {
+    setLogs(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+  };
+
+  const testApi = async () => {
+    setLoading(true);
+    setError('');
+    setResponse('');
+    setLogs([]);
+
+    try {
+      addLog('Starting API test...');
+      addLog('Sending POST request to /api/chat');
+      
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'claude-3-5-sonnet-20241022',
+          max_tokens: 100,
+          messages: [
+            {
+              role: 'user',
+              content: 'Say "Hello! The API is working perfectly!" in a friendly way.'
+            }
+          ]
+        })
+      });
+
+      addLog(`Response status: ${res.status} ${res.statusText}`);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        addLog('API returned error');
+        setError(JSON.stringify(errorData, null, 2));
+        return;
+      }
+
+      const data = await res.json();
+      addLog('API call successful!');
+      
+      if (data.content && data.content[0] && data.content[0].text) {
+        setResponse(data.content[0].text);
+        addLog('Successfully extracted response text');
+      } else {
+        setResponse(JSON.stringify(data, null, 2));
+        addLog('Response in unexpected format');
+      }
+    } catch (err) {
+      addLog(`Error caught: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setError(`Network Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-xl p-8 mb-6">
+          <h1 className="text-3xl font-bold mb-2">🔍 API Diagnostic Tool</h1>
+          <p className="text-gray-600 mb-6">Test your Anthropic API connection</p>
+          
+          <button
+            onClick={testApi}
+            disabled={loading}
+            className="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-colors"
+          >
+            {loading ? (
+              <span className="flex items-center">
+                <span className="animate-spin mr-2">⏳</span>
+                Testing...
+              </span>
+            ) : (
+              '▶ Test API Endpoint'
+            )}
+          </button>
+        </div>
+
+        {/* Logs */}
+        {logs.length > 0 && (
+          <div className="bg-gray-900 text-green-400 rounded-lg p-4 mb-6 font-mono text-sm">
+            <div className="font-bold mb-2 text-green-300">📋 Execution Log:</div>
+            {logs.map((log, i) => (
+              <div key={i} className="mb-1">{log}</div>
+            ))}
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <div className="bg-red-50 border-2 border-red-200 rounded-lg p-6 mb-6">
+            <div className="flex items-start">
+              <span className="text-2xl mr-3">❌</span>
+              <div className="flex-1">
+                <h2 className="font-bold text-red-800 mb-2 text-lg">Error Detected</h2>
+                <pre className="text-sm text-red-700 whitespace-pre-wrap overflow-auto bg-red-100 p-3 rounded">{error}</pre>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Success Response */}
+        {response && (
+          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 mb-6">
+            <div className="flex items-start">
+              <span className="text-2xl mr-3">✅</span>
+              <div className="flex-1">
+                <h2 className="font-bold text-green-800 mb-2 text-lg">Success! API is Working</h2>
+                <div className="bg-green-100 p-4 rounded text-green-800">{response}</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Troubleshooting Guide */}
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <h2 className="font-bold text-xl mb-4 flex items-center">
+            <span className="text-2xl mr-2">🔧</span>
+            Troubleshooting Checklist
+          </h2>
+          <div className="space-y-4">
+            <div className="border-l-4 border-orange-500 pl-4">
+              <h3 className="font-semibold mb-1">1. Check Environment Variable</h3>
+              <p className="text-sm text-gray-600">Vercel Dashboard → Settings → Environment Variables</p>
+              <p className="text-sm text-gray-600">Verify <code className="bg-gray-100 px-2 py-1 rounded">ANTHROPIC_API_KEY</code> exists</p>
+            </div>
+            
+            <div className="border-l-4 border-orange-500 pl-4">
+              <h3 className="font-semibold mb-1">2. Check All Environments</h3>
+              <p className="text-sm text-gray-600">Make sure the variable is enabled for Production, Preview, AND Development</p>
+            </div>
+            
+            <div className="border-l-4 border-orange-500 pl-4">
+              <h3 className="font-semibold mb-1">3. Verify API Key Format</h3>
+              <p className="text-sm text-gray-600">Should start with: <code className="bg-gray-100 px-2 py-1 rounded">sk-ant-api03-...</code></p>
+            </div>
+            
+            <div className="border-l-4 border-orange-500 pl-4">
+              <h3 className="font-semibold mb-1">4. Redeploy After Changes</h3>
+              <p className="text-sm text-gray-600">Environment variable changes require a new deployment</p>
+            </div>
+            
+            <div className="border-l-4 border-orange-500 pl-4">
+              <h3 className="font-semibold mb-1">5. Check Vercel Function Logs</h3>
+              <p className="text-sm text-gray-600">Dashboard → Deployments → Functions → api/chat</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Checks */}
+        <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-lg p-6">
+          <h2 className="font-bold text-lg mb-4">🎯 Quick Checks</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div className="font-semibold mb-2">File Structure:</div>
+              <div className="bg-white p-3 rounded font-mono text-xs">
+                <div>project/</div>
+                <div className="ml-4">├── api/</div>
+                <div className="ml-8 text-orange-600">└── chat.ts ✓</div>
+                <div className="ml-4">└── src/</div>
+                <div className="ml-8">└── ApiTest.tsx ✓</div>
+              </div>
+            </div>
+            <div>
+              <div className="font-semibold mb-2">Expected Response:</div>
+              <div className="bg-white p-3 rounded font-mono text-xs">
+                <div>{'{'}</div>
+                <div className="ml-4">"content": [{'{'}</div>
+                <div className="ml-8 text-green-600">"text": "Hello!..."</div>
+                <div className="ml-4">{'}']'}</div>
+                <div>{'}'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => window.location.href = '/'}
+            className="text-orange-600 hover:text-orange-700 underline"
+          >
+            ← Back to Journal App
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ApiTest;
+
+const ApiTest = () => {
+  const [response, setResponse] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const testApi = async () => {
+    setLoading(true);
+    setError('');
+    setResponse('');
+
+    try {
+      console.log('Testing API endpoint...');
+      
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'claude-3-5-sonnet-20241022',
+          max_tokens: 100,
+          messages: [
+            {
+              role: 'user',
+              content: 'Say "Hello! The API is working!" in a friendly way.'
+            }
+          ]
+        })
+      });
+
+      console.log('Response status:', res.status);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        setError(`Error ${res.status}: ${JSON.stringify(errorData, null, 2)}`);
+        return;
+      }
+
+      const data = await res.json();
+      console.log('Response data:', data);
+      
+      if (data.content && data.content[0] && data.content[0].text) {
+        setResponse(data.content[0].text);
+      } else {
+        setResponse(JSON.stringify(data, null, 2));
+      }
+    } catch (err) {
+      console.error('Test error:', err);
+      setError(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">API Test Page</h1>
+        
+        <button
+          onClick={testApi}
+          disabled={loading}
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 mb-6"
+        >
+          {loading ? 'Testing...' : 'Test API Endpoint'}
+        </button>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <h2 className="font-bold text-red-800 mb-2">Error:</h2>
+            <pre className="text-sm text-red-700 whitespace-pre-wrap">{error}</pre>
+          </div>
+        )}
+
+        {response && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <h2 className="font-bold text-green-800 mb-2">Success! Response:</h2>
+            <p className="text-green-700">{response}</p>
+          </div>
+        )}
+
+        <div className="mt-8 bg-white rounded-lg shadow p-6">
+          <h2 className="font-bold text-lg mb-4">Troubleshooting Checklist:</h2>
+          <ul className="space-y-2 text-sm">
+            <li>✓ Check if ANTHROPIC_API_KEY is set in Vercel Environment Variables</li>
+            <li>✓ Check that api/chat.ts file exists in your repo</li>
+            <li>✓ Check Vercel Function logs for errors</li>
+            <li>✓ Open browser DevTools Console for any errors</li>
+            <li>✓ Check Network tab for the /api/chat request</li>
+          </ul>
+        </div>
+
+        <div className="mt-4 bg-blue-50 rounded-lg p-4 text-sm">
+          <p className="font-medium mb-2">How to check Vercel Function Logs:</p>
+          <ol className="list-decimal ml-4 space-y-1">
+            <li>Go to Vercel Dashboard</li>
+            <li>Click on your project</li>
+            <li>Click "Deployments" → Latest deployment</li>
+            <li>Click "Functions" tab</li>
+            <li>Click on "api/chat"</li>
+            <li>Look for error messages</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ApiTest;
