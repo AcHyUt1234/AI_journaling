@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Heart, Brain, Sparkles, Send, Calendar, Search, User, MessageCircle, Clock, TrendingUp, Bell, Lightbulb, BarChart3, PieChart, Activity, LogIn, LogOut, UserPlus, Lock, Eye, EyeOff } from 'lucide-react';
 
+type User = {
+  username: string;
+  password: string;
+};
+
 const AIJournalingTool = () => {
   // Authentication state
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [showAuth, setShowAuth] = useState(true);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
   const [authForm, setAuthForm] = useState({ username: '', password: '', confirmPassword: '' });
