@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Heart, Brain, Sparkles, Send, Calendar, Search, User, MessageCircle, Clock, TrendingUp, Bell, Lightbulb, BarChart3, PieChart, Activity, LogIn, LogOut, UserPlus, Lock, Eye, EyeOff } from 'lucide-react';
 
-type User = {
+interface User {
   username: string;
-  password: string;
-};
+}
+
+interface JournalEntry {
+  id: number;
+  date: string;
+  time: string;
+  dayOfWeek: string;
+  fullDate: string;
+  entry: string;
+  guidance: string;
+  mood: string;
+  analysis: any;
+}
 
 const AIJournalingTool = () => {
   // Authentication state
@@ -19,7 +30,7 @@ const AIJournalingTool = () => {
   const [journalEntry, setJournalEntry] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [journalHistory, setJournalHistory] = useState([]);
+  const [journalHistory, setJournalHistory] = useState<JournalEntry[]>([]);
   const [currentMood, setCurrentMood] = useState('');
   const [showHistory, setShowHistory] = useState(false);
   const [activeTab, setActiveTab] = useState('write');
@@ -29,7 +40,13 @@ const AIJournalingTool = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('all');
 
   // Mock user database - in a real app, this would be a proper database
-  const [userDatabase, setUserDatabase] = useState<any>({});
+  interface UserData {
+  journalHistory: any[]; // refine type if possible
+  lastActive: string;
+  password: string;
+  // add other user data fields as needed 
+  }
+  const [userDatabase, setUserDatabase] = useState<Record<string, UserData>>({});
 
   // Load user data on component mount
   useEffect(() => {
@@ -70,7 +87,7 @@ const AIJournalingTool = () => {
     }
   }, [journalHistory, currentUser]);
 
-  const saveUserJournalData = (username, data) => {
+  const saveUserJournalData = (username: string, data: JournalEntry[]) => {
     setUserDatabase(prev => ({
       ...prev,
       [username]: {
@@ -81,7 +98,7 @@ const AIJournalingTool = () => {
     }));
   };
 
-  const loadUserJournalData = (username) => {
+  const loadUserJournalData = (username: string) => {
     if (userDatabase[username]?.journalHistory) {
       setJournalHistory(userDatabase[username].journalHistory);
     } else {
@@ -119,6 +136,7 @@ const AIJournalingTool = () => {
         username: authForm.username,
         password: authForm.password, // In a real app, this would be hashed
         createdAt: new Date().toISOString(),
+        lastActive: new Date().toISOString(),
         journalHistory: []
       };
 
@@ -219,13 +237,13 @@ SPIRITUAL INSIGHTS:
 
   const analyzeEntryForInsights = async (entry: string) => {
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "claude-3-5-sonnet-20241022",
+          model: "claude-sonnet-4-20250514",
           max_tokens: 400,
           messages: [
             {
@@ -234,10 +252,9 @@ SPIRITUAL INSIGHTS:
 
 Entry: "${entry}"
 
-Respond ONLY with valid JSON (no markdown, no backticks):
+Respond ONLY with valid JSON:
 {
-  "categories": 
-  {
+  "categories": {
     "relationship": 0-10,
     "money": 0-10,
     "health": 0-10,
@@ -262,10 +279,10 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
     } catch (error) {
       console.error('Analysis error:', error);
       return {
-        categories: { relationship: 5, money: 3, health: 4, education: 2, job: 3 },
-        sentiment: "neutral" as const,
-        dominant_theme: "general" as const,
-        insight: "Love is not an emotion. It is your very existence."
+        categories: { relationship: 0, money: 0, health: 0, education: 0, job: 0 },
+        sentiment: "neutral",
+        dominant_theme: "general",
+        insight: ""
       };
     }
   };
@@ -286,17 +303,44 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
 
       const analysis = await analyzeEntryForInsights(entry);
 
-      // Mock guidance responses - replace with real API later
-      const guidanceResponses = [
-        "Thank you for sharing this with me. I can feel the sincerity in your words. What emotions come up as you reflect on this?",
-        "Your openness is beautiful. There's wisdom in simply observing our thoughts without judgment. How does writing this make you feel?",
-        "I appreciate you taking time to reflect. Sometimes just putting our thoughts into words brings clarity. What insight are you gaining?",
-        "This shows such thoughtful self-reflection. Our inner world is vast and worthy of exploration. What would bring you peace right now?",
-        "Your honesty touches my heart. Every feeling, even difficult ones, can teach us something. What is this experience showing you?",
-        "Thank you for trusting me with your thoughts. Life has its rhythms of joy and challenge. How are you caring for yourself today?"
-      ];
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 400,
+          messages: [
+            {
+              role: "user",
+              content: `You are a gentle AI journaling companion inspired by Sri Sri Ravi Shankar's wisdom.
 
-      const guidance = guidanceResponses[Math.floor(Math.random() * guidanceResponses.length)] + "\n\nWould you like a small insight?";
+Context: ${wisdomContext}
+
+RECENT HISTORY (last 3 entries):
+${conversationHistory.map(h => `${h.day}: "${h.entry}" (${h.mood}, ${h.sentiment})`).join('\n')}
+
+TODAY'S ENTRY:
+"${entry}" (mood: ${currentMood || 'none'})
+
+Respond as a caring friend:
+- Acknowledge warmly (1 sentence)
+- Ask ONE gentle reflection question
+- Keep under 60 words total
+- Reference patterns if you see them
+- Be conversational, not teachy
+
+Then ask: "Would you like a small insight?"
+
+Stay brief and caring.`
+            }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      const guidance = data.content[0].text;
       
       const newEntry = {
         id: Date.now(),
@@ -317,8 +361,7 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
       
     } catch (error) {
       console.error('Error getting guidance:', error);
-      setAiResponse("I'm here with you. How are you feeling after writing this?\n\nWould you like a small insight?");
-      setShowInsightOption(true);
+      setAiResponse("I'm here with you. How are you feeling after writing this?");
     } finally {
       setIsLoading(false);
     }
@@ -338,7 +381,7 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
     
     const now = new Date();
     const daysBack = selectedTimeframe === 'week' ? 7 : selectedTimeframe === 'month' ? 30 : 7;
-    const cutoffDate = new Date(now - daysBack * 24 * 60 * 60 * 1000);
+    const cutoffDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
     
     return journalHistory.filter(entry => new Date(entry.fullDate) >= cutoffDate);
   };
@@ -347,7 +390,7 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
     const filteredHistory = getFilteredHistory();
     if (filteredHistory.length < 5) return null;
 
-    const stats = {
+    const stats: Record<string, number> = {
       relationship: 0,
       money: 0, 
       health: 0,
@@ -355,7 +398,12 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
       job: 0
     };
 
-    let sentimentCounts = { positive: 0, neutral: 0, negative: 0 };
+    type Sentiment = 'positive' | 'neutral' | 'negative';
+    const sentimentCounts: Record<Sentiment, number> = {
+      positive: 0,
+      neutral: 0,
+      negative: 0,
+    };
     let totalScore = 0;
 
     filteredHistory.forEach(entry => {
@@ -365,19 +413,20 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
           stats[key] += score;
           totalScore += score;
         });
-        sentimentCounts[entry.analysis.sentiment] = (sentimentCounts[entry.analysis.sentiment] || 0) + 1;
+        const sentiment = entry.analysis.sentiment as Sentiment;
+        sentimentCounts[sentiment] = (sentimentCounts[sentiment] || 0) + 1;
       }
     });
 
     // Calculate averages and percentages
-    const avgStats = {};
+    const avgStats: Record<string, number> = {};
     Object.keys(stats).forEach(key => {
       avgStats[key] = Math.round((stats[key] / filteredHistory.length) * 10) / 10;
     });
 
     const dominantSentiment = Object.keys(sentimentCounts).reduce((a, b) => 
-      sentimentCounts[a] > sentimentCounts[b] ? a : b
-    );
+      sentimentCounts[a as Sentiment] > sentimentCounts[b as Sentiment] ? a : b
+    ) as Sentiment;
 
     const topConcern = Object.keys(avgStats).reduce((a, b) => avgStats[a] > avgStats[b] ? a : b);
 
@@ -391,7 +440,7 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
     };
   };
 
-  const calculateTrend = (entries) => {
+  const calculateTrend = (entries: JournalEntry[]) => {
     if (entries.length < 4) return 'stable';
     
     const recent = entries.slice(0, Math.ceil(entries.length/2));
@@ -411,13 +460,13 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
     }
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && e.ctrlKey) {
       handleSubmit();
     }
   };
 
-  const handleAuthKeyPress = (e) => {
+  const handleAuthKeyPress = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       handleAuth();
     }
@@ -575,7 +624,7 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
               <h1 className="text-3xl font-bold text-gray-800">Mindful Journal</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Welcome, {currentUser.username}</span>
+              {currentUser && (<span className="text-sm text-gray-600">Welcome, {currentUser.username ?? 'Guest'}</span>)}
               <button
                 onClick={handleLogout}
                 className="flex items-center px-3 py-1.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
