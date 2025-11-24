@@ -178,11 +178,11 @@ const ApiTest = () => {
             <div>
               <div className="font-semibold mb-2">Expected Response:</div>
               <div className="bg-white p-3 rounded font-mono text-xs">
-                <div>{'{'}</div>
-                <div className="ml-4">"content": [{'{'}</div>
-                <div className="ml-8 text-green-600">"text": "Hello!..."</div>
-                <div className="ml-4">{'}']'}</div>
-                <div>{'}'}</div>
+                <div>&#123;</div>
+                <div className="ml-4">&quot;content&quot;: [&#123;</div>
+                <div className="ml-8 text-green-600">&quot;text&quot;: &quot;Hello!...&quot;</div>
+                <div className="ml-4">&#125;]</div>
+                <div>&#125;</div>
               </div>
             </div>
           </div>
