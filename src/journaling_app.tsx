@@ -237,7 +237,7 @@ SPIRITUAL INSIGHTS:
 
   const analyzeEntryForInsights = async (entry: string) => {
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -303,7 +303,7 @@ Rate 0-10 how much the entry relates to each life area. Insight should be releva
 
       const analysis = await analyzeEntryForInsights(entry);
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
