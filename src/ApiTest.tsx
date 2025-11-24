@@ -3,69 +3,136 @@
 
 import React, { useState } from 'react';
 
-const ApiTest = () => {
-  const [response, setResponse] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [logs, setLogs] = useState<string[]>([]);
+// const ApiTest = () => {
+//   const [response, setResponse] = useState('');
+//   const [error, setError] = useState('');
+//   const [loading, setLoading] = useState(false);
+//   const [logs, setLogs] = useState<string[]>([]);
 
-  const addLog = (message: string) => {
-    setLogs(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
-  };
+//   const addLog = (message: string) => {
+//     setLogs(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+//   };
 
-  const testApi = async () => {
-    setLoading(true);
-    setError('');
-    setResponse('');
-    setLogs([]);
+//   const testApi = async () => {
+//     setLoading(true);
+//     setError('');
+//     setResponse('');
+//     setLogs([]);
 
-    try {
-      addLog('Starting API test...');
-      addLog('Sending POST request to /api/chat');
+//     try {
+//       addLog('Starting API test...');
+//       addLog('Sending POST request to /api/chat');
       
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
-          max_tokens: 100,
-          messages: [
-            {
-              role: 'user',
-              content: 'Say "Hello! The API is working perfectly!" in a friendly way.'
-            }
-          ]
-        })
-      });
+//       const res = await fetch('/api/chat', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           model: 'claude-3-5-sonnet-20241022',
+//           max_tokens: 100,
+//           messages: [
+//             {
+//               role: 'user',
+//               content: 'Say "Hello! The API is working perfectly!" in a friendly way.'
+//             }
+//           ]
+//         })
+//       });
 
-      addLog(`Response status: ${res.status} ${res.statusText}`);
+//       addLog(`Response status: ${res.status} ${res.statusText}`);
       
-      if (!res.ok) {
-        const errorData = await res.json();
-        addLog('API returned error');
+//       if (!res.ok) {
+//         const errorData = await res.json();
+//         addLog('API returned error');
+//         setError(JSON.stringify(errorData, null, 2));
+//         return;
+//       }
+
+//       const data = await res.json();
+//       addLog('API call successful!');
+      
+//       if (data.content && data.content[0] && data.content[0].text) {
+//         setResponse(data.content[0].text);
+//         addLog('Successfully extracted response text');
+//       } else {
+//         setResponse(JSON.stringify(data, null, 2));
+//         addLog('Response in unexpected format');
+//       }
+//     } catch (err) {
+//       addLog(`Error caught: ${err instanceof Error ? err.message : 'Unknown error'}`);
+//       setError(`Network Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+const testApi = async () => {
+  setLoading(true);
+  setError('');
+  setResponse('');
+  setLogs([]);
+
+  try {
+    addLog('Starting API test...');
+    
+    // Try absolute URL first to rule out routing issues
+    const apiUrl = window.location.origin + '/api/chat';
+    addLog(`Calling: ${apiUrl}`);
+    
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 100,
+        messages: [
+          {
+            role: 'user',
+            content: 'Say "Hello! The API is working perfectly!" in a friendly way.'
+          }
+        ]
+      })
+    });
+
+    addLog(`Response status: ${res.status} ${res.statusText}`);
+    addLog(`Response headers: ${JSON.stringify([...res.headers])}`);
+    
+    // Get the raw response text first
+    const responseText = await res.text();
+    addLog(`Raw response (first 200 chars): ${responseText.substring(0, 200)}`);
+    
+    if (!res.ok) {
+      addLog('API returned error');
+      try {
+        const errorData = JSON.parse(responseText);
         setError(JSON.stringify(errorData, null, 2));
-        return;
+      } catch {
+        setError(`Non-JSON error response: ${responseText}`);
       }
-
-      const data = await res.json();
-      addLog('API call successful!');
-      
-      if (data.content && data.content[0] && data.content[0].text) {
-        setResponse(data.content[0].text);
-        addLog('Successfully extracted response text');
-      } else {
-        setResponse(JSON.stringify(data, null, 2));
-        addLog('Response in unexpected format');
-      }
-    } catch (err) {
-      addLog(`Error caught: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      setError(`Network Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    const data = JSON.parse(responseText);
+    addLog('API call successful!');
+    
+    if (data.content && data.content[0] && data.content[0].text) {
+      setResponse(data.content[0].text);
+      addLog('Successfully extracted response text');
+    } else {
+      setResponse(JSON.stringify(data, null, 2));
+      addLog('Response in unexpected format');
+    }
+  } catch (err) {
+    addLog(`Error caught: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    setError(`Network Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 p-8">
