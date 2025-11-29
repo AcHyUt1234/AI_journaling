@@ -486,31 +486,185 @@ Stay brief and caring.`
   const stats = calculateStats();
 
   // Authentication UI
-  if (showAuth) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-4">
-              {/* Sri Sri Logo placeholder - replace with actual logo */}
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-lg">ॐ</span>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">Mindful Journal</h1>
-                <p className="text-xs text-orange-600 font-medium">Inspired by Art of Living</p>
+  // if (showAuth) {
+  //   return (
+  //     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center p-4">
+  //       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+  //         <div className="text-center mb-8">
+  //           <div className="flex items-center justify-center mb-4">
+  //             {/* Sri Sri Logo placeholder - replace with actual logo */}
+  //             <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-3">
+  //               <span className="text-white font-bold text-lg">ॐ</span>
+  //             </div>
+  //             <div>
+  //               <h1 className="text-2xl font-bold text-gray-800">Mindful Journal</h1>
+  //               <p className="text-xs text-orange-600 font-medium">Inspired by Art of Living</p>
+  //             </div>
+  //           </div>
+  //           <p className="text-gray-600">Your personal space for reflection</p>
+  //         </div>
+
+  //         <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
+  //           <button
+  //             onClick={() => setAuthMode('login')}
+  //             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+  //               authMode === 'login' 
+  //                 ? 'bg-white text-orange-700 shadow-sm' 
+  //                 : 'text-gray-600 hover:text-gray-800'
+  //             }`}
+  //           >
+  //             <LogIn className="w-4 h-4 inline mr-2" />
+  //             Sign In
+  //           </button>
+  //           <button
+  //             onClick={() => setAuthMode('signup')}
+  //             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+  //               authMode === 'signup' 
+  //                 ? 'bg-white text-orange-700 shadow-sm' 
+  //                 : 'text-gray-600 hover:text-gray-800'
+  //             }`}
+  //           >
+  //             <UserPlus className="w-4 h-4 inline mr-2" />
+  //             Sign Up
+  //           </button>
+  //         </div>
+
+  //         {authError && (
+  //           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+  //             {authError}
+  //           </div>
+  //         )}
+
+  //         <div className="space-y-4">
+  //           <div>
+  //             <label className="block text-sm font-medium text-gray-700 mb-1">
+  //               Username
+  //             </label>
+  //             <input
+  //               type="text"
+  //               value={authForm.username}
+  //               onChange={(e) => setAuthForm(prev => ({...prev, username: e.target.value}))}
+  //               onKeyPress={handleAuthKeyPress}
+  //               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+  //               placeholder="Choose a username"
+  //             />
+  //           </div>
+
+  //           <div>
+  //             <label className="block text-sm font-medium text-gray-700 mb-1">
+  //               Password
+  //             </label>
+  //             <div className="relative">
+  //               <input
+  //                 type={showPassword ? 'text' : 'password'}
+  //                 value={authForm.password}
+  //                 onChange={(e) => setAuthForm(prev => ({...prev, password: e.target.value}))}
+  //                 onKeyPress={handleAuthKeyPress}
+  //                 className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+  //                 placeholder="Enter your password"
+  //               />
+  //               <button
+  //                 type="button"
+  //                 onClick={() => setShowPassword(!showPassword)}
+  //                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+  //               >
+  //                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+  //               </button>
+  //             </div>
+  //           </div>
+
+  //           {authMode === 'signup' && (
+  //             <div>
+  //               <label className="block text-sm font-medium text-gray-700 mb-1">
+  //                 Confirm Password
+  //               </label>
+  //               <input
+  //                 type="password"
+  //                 value={authForm.confirmPassword}
+  //                 onChange={(e) => setAuthForm(prev => ({...prev, confirmPassword: e.target.value}))}
+  //                 onKeyPress={handleAuthKeyPress}
+  //                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+  //                 placeholder="Confirm your password"
+  //               />
+  //             </div>
+  //           )}
+
+  //           <button
+  //             onClick={handleAuth}
+  //             className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors font-medium"
+  //           >
+  //             {authMode === 'login' ? 'Sign In' : 'Create Account'}
+  //           </button>
+  //         </div>
+
+  //         <div className="mt-6 text-center text-xs text-gray-500">
+  //           <div className="flex items-center justify-center mb-2">
+  //             <div className="w-4 h-4 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-2">
+  //               <span className="text-white font-bold text-xs">ॐ</span>
+  //             </div>
+  //             <span className="font-medium">Art of Living Foundation</span>
+  //           </div>
+  //           <p>Your journal entries are stored securely and privately.</p>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  // This replaces the "if (showAuth)" section in your journaling_app.tsx
+
+if (showAuth) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-orange-400 via-pink-300 to-yellow-300 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-orange-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-200/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
+        {/* Logo and Header Card */}
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8 mb-6 transform hover:scale-[1.02] transition-transform duration-300">
+          <div className="text-center">
+            {/* Art of Living Logo - Replace with actual image */}
+            <div className="mb-6 flex justify-center">
+              <img 
+                src="/art-of-living-logo.png" 
+                alt="Art of Living" 
+                className="h-20 w-auto"
+                onError={(e) => {
+                  // Fallback if image doesn't load
+                  e.currentTarget.style.display = 'none';
+                  const next = e.currentTarget.nextElementSibling as HTMLElement | null;
+                  if (next) {
+                    next.style.display = 'flex';}
+                }}
+              />
+              {/* Fallback logo */}
+              <div className="hidden w-20 h-20 bg-gradient-to-br from-orange-500 via-yellow-500 to-orange-600 rounded-full items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-3xl">ॐ</span>
               </div>
             </div>
-            <p className="text-gray-600">Your personal space for reflection</p>
+            
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-yellow-600 bg-clip-text text-transparent mb-2">
+              Mindful Journal
+            </h1>
+            <p className="text-orange-600 font-semibold text-sm mb-2">Inspired by Art of Living</p>
+            <p className="text-gray-600 text-sm">Your sacred space for reflection and wisdom</p>
           </div>
+        </div>
 
-          <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
+        {/* Auth Form Card */}
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8 transform hover:shadow-orange-200/50 transition-all duration-300">
+          {/* Tab Selector */}
+          <div className="flex mb-8 bg-gradient-to-r from-orange-100 to-yellow-100 rounded-2xl p-1.5">
             <button
               onClick={() => setAuthMode('login')}
-              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                authMode === 'login' 
-                  ? 'bg-white text-orange-700 shadow-sm' 
-                  : 'text-gray-600 hover:text-gray-800'
+              className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 transform ${
+                authMode === 'login'
+                  ? 'bg-white text-orange-600 shadow-lg scale-105'
+                  : 'text-gray-600 hover:text-orange-600'
               }`}
             >
               <LogIn className="w-4 h-4 inline mr-2" />
@@ -518,10 +672,10 @@ Stay brief and caring.`
             </button>
             <button
               onClick={() => setAuthMode('signup')}
-              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                authMode === 'signup' 
-                  ? 'bg-white text-orange-700 shadow-sm' 
-                  : 'text-gray-600 hover:text-gray-800'
+              className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 transform ${
+                authMode === 'signup'
+                  ? 'bg-white text-orange-600 shadow-lg scale-105'
+                  : 'text-gray-600 hover:text-orange-600'
               }`}
             >
               <UserPlus className="w-4 h-4 inline mr-2" />
@@ -529,87 +683,120 @@ Stay brief and caring.`
             </button>
           </div>
 
+          {/* Error Message */}
           {authError && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              {authError}
+            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-2xl animate-shake">
+              <p className="text-red-700 text-sm font-medium text-center">{authError}</p>
             </div>
           )}
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+          {/* Form Fields */}
+          <div className="space-y-5">
+            <div className="transform transition-all duration-300 hover:translate-x-1">
+              <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
                 Username
               </label>
-              <input
-                type="text"
-                value={authForm.username}
-                onChange={(e) => setAuthForm(prev => ({...prev, username: e.target.value}))}
-                onKeyPress={handleAuthKeyPress}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                placeholder="Choose a username"
-              />
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  value={authForm.username}
+                  onChange={(e) => setAuthForm(prev => ({...prev, username: e.target.value}))}
+                  onKeyPress={handleAuthKeyPress}
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition-all duration-300 bg-gray-50 hover:bg-white"
+                  placeholder="Choose your username"
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="transform transition-all duration-300 hover:translate-x-1">
+              <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
                 Password
               </label>
               <div className="relative">
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={authForm.password}
                   onChange={(e) => setAuthForm(prev => ({...prev, password: e.target.value}))}
                   onKeyPress={handleAuthKeyPress}
-                  className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition-all duration-300 bg-gray-50 hover:bg-white"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-orange-600 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
             {authMode === 'signup' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="transform transition-all duration-300 hover:translate-x-1 animate-fadeIn">
+                <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
                   Confirm Password
                 </label>
-                <input
-                  type="password"
-                  value={authForm.confirmPassword}
-                  onChange={(e) => setAuthForm(prev => ({...prev, confirmPassword: e.target.value}))}
-                  onKeyPress={handleAuthKeyPress}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="Confirm your password"
-                />
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="password"
+                    value={authForm.confirmPassword}
+                    onChange={(e) => setAuthForm(prev => ({...prev, confirmPassword: e.target.value}))}
+                    onKeyPress={handleAuthKeyPress}
+                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition-all duration-300 bg-gray-50 hover:bg-white"
+                    placeholder="Confirm your password"
+                  />
+                </div>
               </div>
             )}
 
+            {/* Submit Button */}
             <button
               onClick={handleAuth}
-              className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors font-medium"
+              className="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-yellow-500 text-white py-4 px-6 rounded-xl hover:from-orange-600 hover:via-pink-600 hover:to-yellow-600 transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] mt-6"
             >
-              {authMode === 'login' ? 'Sign In' : 'Create Account'}
+              {authMode === 'login' ? (
+                <>
+                  <LogIn className="w-5 h-5 inline mr-2" />
+                  Sign In to Journal
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-5 h-5 inline mr-2" />
+                  Begin Your Journey
+                </>
+              )}
             </button>
           </div>
 
-          <div className="mt-6 text-center text-xs text-gray-500">
-            <div className="flex items-center justify-center mb-2">
-              <div className="w-4 h-4 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-2">
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <div className="flex items-center justify-center mb-3">
+              <div className="w-5 h-5 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center mr-2 shadow">
                 <span className="text-white font-bold text-xs">ॐ</span>
               </div>
-              <span className="font-medium">Art of Living Foundation</span>
+              <span className="font-semibold text-gray-700 text-sm">Art of Living Foundation</span>
             </div>
-            <p>Your journal entries are stored securely and privately.</p>
+            <p className="text-gray-500 text-xs leading-relaxed max-w-sm mx-auto">
+              Your journal entries are stored securely and privately. 
+              <br />
+              Embrace mindfulness, one entry at a time.
+            </p>
           </div>
         </div>
+
+        {/* Additional Info */}
+        <div className="mt-6 text-center">
+          <p className="text-white/90 text-sm font-medium drop-shadow-lg">
+            ✨ Guided by Sri Sri Ravi Shankar's timeless wisdom
+          </p>
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   // Main Journal UI (when logged in)
   return (
