@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import AIJournalingTool from "./journaling_app";
-import ApiTest from "./ApiTest";
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -15,13 +14,8 @@ function App() {
     return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
-  // Test page
-  if (currentPath === "/api-test") {
-    return <ApiTest />;
-  }
-
   // Main app
-  return <AIJournalingTool />;
+  return <AIJournalingTool/>;
 }
 
 export default App;

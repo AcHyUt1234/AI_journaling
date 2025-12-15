@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Heart, Brain, Sparkles, Send, Calendar, Search, User, MessageCircle, Clock, TrendingUp, Bell, Lightbulb, BarChart3, PieChart, Activity, LogIn, LogOut, UserPlus, Lock, Eye, EyeOff } from 'lucide-react';
+import { signUpUser, signInUser, getJournalEntries, saveJournalEntry } from './authHelpers';
+
 
 interface User {
   username: string;
@@ -39,74 +41,80 @@ const AIJournalingTool = () => {
   const [lastReminderCheck, setLastReminderCheck] = useState(Date.now());
   const [selectedTimeframe, setSelectedTimeframe] = useState('all');
 
-  // Mock user database - in a real app, this would be a proper database
-  interface UserData {
-  journalHistory: any[]; // refine type if possible
-  lastActive: string;
-  password: string;
-  // add other user data fields as needed 
-  }
-  const [userDatabase, setUserDatabase] = useState<Record<string, UserData>>({});
+  // // Mock user database - in a real app, this would be a proper database
+  // interface UserData {
+  // journalHistory: any[]; // refine type if possible
+  // lastActive: string;
+  // password: string;
+  // // add other user data fields as needed 
+  // }
+  // const [userDatabase, setUserDatabase] = useState<Record<string, UserData>>({});
+
+  // User ID for Supabase
+  const [userId, setUserId] = useState<string | null>(null);
 
   // Load user data on component mount
   useEffect(() => {
-    const savedUsers = localStorage.getItem('journalUsers');
     const savedCurrentUser = localStorage.getItem('currentJournalUser');
     
-    if (savedUsers) {
-      try {
-        setUserDatabase(JSON.parse(savedUsers));
-      } catch (e) {
-        console.error('Error loading user database:', e);
-      }
-    }
-
     if (savedCurrentUser) {
       try {
         const user = JSON.parse(savedCurrentUser);
         setCurrentUser(user);
+        setUserId(user.id);
         setShowAuth(false);
-        loadUserJournalData(user.username);
+        loadUserJournalData(user.id);
       } catch (e) {
         console.error('Error loading current user:', e);
       }
     }
   }, []);
 
-  // Save user database to localStorage whenever it changes
-  useEffect(() => {
-    if (Object.keys(userDatabase).length > 0) {
-      localStorage.setItem('journalUsers', JSON.stringify(userDatabase));
-    }
-  }, [userDatabase]);
+  // // Save user database to localStorage whenever it changes
+  // useEffect(() => {
+  //   if (Object.keys(userDatabase).length > 0) {
+  //     localStorage.setItem('journalUsers', JSON.stringify(userDatabase));
+  //   }
+  // }, [userDatabase]);
 
-  // Save journal data whenever it changes (for logged-in user)
-  useEffect(() => {
-    if (currentUser && journalHistory.length > 0) {
-      saveUserJournalData(currentUser.username, journalHistory);
-    }
-  }, [journalHistory, currentUser]);
+  // // Save journal data whenever it changes (for logged-in user)
+  // useEffect(() => {
+  //   if (currentUser && journalHistory.length > 0) {
+  //     saveUserJournalData(currentUser.username, journalHistory);
+  //   }
+  // }, [journalHistory, currentUser]);
 
-  const saveUserJournalData = (username: string, data: JournalEntry[]) => {
-    setUserDatabase(prev => ({
-      ...prev,
-      [username]: {
-        ...prev[username],
-        journalHistory: data,
-        lastActive: new Date().toISOString()
-      }
-    }));
+  // const saveUserJournalData = (username: string, data: JournalEntry[]) => {
+  //   setUserDatabase(prev => ({
+  //     ...prev,
+  //     [username]: {
+  //       ...prev[username],
+  //       journalHistory: data,
+  //       lastActive: new Date().toISOString()
+  //     }
+  //   }));
+  // };
+
+  const loadUserJournalData = async (userId: string) => {
+    const result = await getJournalEntries(userId);
+    if (result.success && result.entries) {
+      // Transform Supabase entries to match your format
+      const transformedEntries = result.entries.map((entry: any) => ({
+        id: entry.id,
+        date: new Date(entry.created_at).toLocaleDateString(),
+        time: new Date(entry.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+        dayOfWeek: new Date(entry.created_at).toLocaleDateString('en', {weekday: 'long'}),
+        fullDate: entry.created_at,
+        entry: entry.entry_text,
+        guidance: entry.guidance,
+        mood: entry.mood,
+        analysis: entry.analysis
+      }));
+      setJournalHistory(transformedEntries);
+    }
   };
 
-  const loadUserJournalData = (username: string) => {
-    if (userDatabase[username]?.journalHistory) {
-      setJournalHistory(userDatabase[username].journalHistory);
-    } else {
-      setJournalHistory([]);
-    }
-  };
-
-  const handleAuth = () => {
+  const handleAuth = async () => {
     setAuthError('');
     
     if (authMode === 'signup') {
@@ -125,28 +133,22 @@ const AIJournalingTool = () => {
         setAuthError('Password must be at least 6 characters');
         return;
       }
+  
+      // Sign up with Supabase
+      const result = await signUpUser(authForm.username, authForm.password);
       
-      if (userDatabase[authForm.username]) {
-        setAuthError('Username already exists');
+      if (!result.success) {
+        setAuthError(result.error || 'Failed to create account');
         return;
       }
-
-      // Create new user
-      const newUser = {
-        username: authForm.username,
-        password: authForm.password, // In a real app, this would be hashed
-        createdAt: new Date().toISOString(),
-        lastActive: new Date().toISOString(),
-        journalHistory: []
-      };
-
-      setUserDatabase(prev => ({
-        ...prev,
-        [authForm.username]: newUser
+  
+      // Success!
+      setCurrentUser({ username: result.user.username });
+      setUserId(result.user.id);
+      localStorage.setItem('currentJournalUser', JSON.stringify({ 
+        username: result.user.username,
+        id: result.user.id 
       }));
-
-      setCurrentUser({ username: authForm.username });
-      localStorage.setItem('currentJournalUser', JSON.stringify({ username: authForm.username }));
       setJournalHistory([]);
       setShowAuth(false);
       setAuthForm({ username: '', password: '', confirmPassword: '' });
@@ -157,16 +159,23 @@ const AIJournalingTool = () => {
         setAuthError('Please enter username and password');
         return;
       }
-
-      const user = userDatabase[authForm.username];
-      if (!user || user.password !== authForm.password) {
-        setAuthError('Invalid username or password');
+  
+      // Sign in with Supabase
+      const result = await signInUser(authForm.username, authForm.password);
+      
+      if (!result.success) {
+        setAuthError(result.error || 'Invalid username or password');
         return;
       }
-
-      setCurrentUser({ username: authForm.username });
-      localStorage.setItem('currentJournalUser', JSON.stringify({ username: authForm.username }));
-      loadUserJournalData(authForm.username);
+  
+      // Success!
+      setCurrentUser({ username: result.user.username });
+      setUserId(result.user.id);
+      localStorage.setItem('currentJournalUser', JSON.stringify({ 
+        username: result.user.username,
+        id: result.user.id 
+      }));
+      await loadUserJournalData(result.user.id);
       setShowAuth(false);
       setAuthForm({ username: '', password: '', confirmPassword: '' });
     }
@@ -342,7 +351,8 @@ Stay brief and caring.`
       const data = await response.json();
       const guidance = data.content[0].text;
       
-      const newEntry = {
+      const newEntry = 
+      {
         id: Date.now(),
         date: now.toLocaleDateString(),
         time: now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
@@ -354,10 +364,18 @@ Stay brief and caring.`
         analysis: analysis
       };
       
+      // Save to Supabase
+      if (userId) {
+        await saveJournalEntry(userId, {
+          entry_text: entry,
+          mood: currentMood,
+          guidance: guidance,
+          analysis: analysis
+        });
+      }
+
+      // Update local state
       setJournalHistory(prev => [newEntry, ...prev]);
-      setAiResponse(guidance);
-      setShowInsightOption(true);
-      setJournalEntry('');
       
     } catch (error) {
       console.error('Error getting guidance:', error);
