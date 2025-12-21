@@ -376,6 +376,9 @@ Stay brief and caring.`
 
       // Update local state
       setJournalHistory(prev => [newEntry, ...prev]);
+      setAiResponse(guidance);
+      setShowInsightOption(true);
+      setJournalEntry('');
       
     } catch (error) {
       console.error('Error getting guidance:', error);
