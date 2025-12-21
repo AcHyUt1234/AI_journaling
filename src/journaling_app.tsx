@@ -507,133 +507,6 @@ Stay brief and caring.`
   const stats = calculateStats();
 
   // Authentication UI
-  // if (showAuth) {
-  //   return (
-  //     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center p-4">
-  //       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-  //         <div className="text-center mb-8">
-  //           <div className="flex items-center justify-center mb-4">
-  //             {/* Sri Sri Logo placeholder - replace with actual logo */}
-  //             <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-3">
-  //               <span className="text-white font-bold text-lg">ॐ</span>
-  //             </div>
-  //             <div>
-  //               <h1 className="text-2xl font-bold text-gray-800">Mindful Journal</h1>
-  //               <p className="text-xs text-orange-600 font-medium">Inspired by Art of Living</p>
-  //             </div>
-  //           </div>
-  //           <p className="text-gray-600">Your personal space for reflection</p>
-  //         </div>
-
-  //         <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
-  //           <button
-  //             onClick={() => setAuthMode('login')}
-  //             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-  //               authMode === 'login' 
-  //                 ? 'bg-white text-orange-700 shadow-sm' 
-  //                 : 'text-gray-600 hover:text-gray-800'
-  //             }`}
-  //           >
-  //             <LogIn className="w-4 h-4 inline mr-2" />
-  //             Sign In
-  //           </button>
-  //           <button
-  //             onClick={() => setAuthMode('signup')}
-  //             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-  //               authMode === 'signup' 
-  //                 ? 'bg-white text-orange-700 shadow-sm' 
-  //                 : 'text-gray-600 hover:text-gray-800'
-  //             }`}
-  //           >
-  //             <UserPlus className="w-4 h-4 inline mr-2" />
-  //             Sign Up
-  //           </button>
-  //         </div>
-
-  //         {authError && (
-  //           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-  //             {authError}
-  //           </div>
-  //         )}
-
-  //         <div className="space-y-4">
-  //           <div>
-  //             <label className="block text-sm font-medium text-gray-700 mb-1">
-  //               Username
-  //             </label>
-  //             <input
-  //               type="text"
-  //               value={authForm.username}
-  //               onChange={(e) => setAuthForm(prev => ({...prev, username: e.target.value}))}
-  //               onKeyPress={handleAuthKeyPress}
-  //               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-  //               placeholder="Choose a username"
-  //             />
-  //           </div>
-
-  //           <div>
-  //             <label className="block text-sm font-medium text-gray-700 mb-1">
-  //               Password
-  //             </label>
-  //             <div className="relative">
-  //               <input
-  //                 type={showPassword ? 'text' : 'password'}
-  //                 value={authForm.password}
-  //                 onChange={(e) => setAuthForm(prev => ({...prev, password: e.target.value}))}
-  //                 onKeyPress={handleAuthKeyPress}
-  //                 className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-  //                 placeholder="Enter your password"
-  //               />
-  //               <button
-  //                 type="button"
-  //                 onClick={() => setShowPassword(!showPassword)}
-  //                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-  //               >
-  //                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-  //               </button>
-  //             </div>
-  //           </div>
-
-  //           {authMode === 'signup' && (
-  //             <div>
-  //               <label className="block text-sm font-medium text-gray-700 mb-1">
-  //                 Confirm Password
-  //               </label>
-  //               <input
-  //                 type="password"
-  //                 value={authForm.confirmPassword}
-  //                 onChange={(e) => setAuthForm(prev => ({...prev, confirmPassword: e.target.value}))}
-  //                 onKeyPress={handleAuthKeyPress}
-  //                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-  //                 placeholder="Confirm your password"
-  //               />
-  //             </div>
-  //           )}
-
-  //           <button
-  //             onClick={handleAuth}
-  //             className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors font-medium"
-  //           >
-  //             {authMode === 'login' ? 'Sign In' : 'Create Account'}
-  //           </button>
-  //         </div>
-
-  //         <div className="mt-6 text-center text-xs text-gray-500">
-  //           <div className="flex items-center justify-center mb-2">
-  //             <div className="w-4 h-4 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-2">
-  //               <span className="text-white font-bold text-xs">ॐ</span>
-  //             </div>
-  //             <span className="font-medium">Art of Living Foundation</span>
-  //           </div>
-  //           <p>Your journal entries are stored securely and privately.</p>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // This replaces the "if (showAuth)" section in your journaling_app.tsx
-
 if (showAuth) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-400 via-pink-300 to-yellow-300 flex items-center justify-center p-4 relative overflow-hidden">
@@ -820,377 +693,413 @@ if (showAuth) {
 }
 
   // Main Journal UI (when logged in)
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header with logout */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div></div>
-            <div className="flex items-center">
-              <Heart className="w-8 h-8 text-orange-600 mr-3" />
-              <h1 className="text-3xl font-bold text-gray-800">Mindful Journal</h1>
+  // Replace the entire "Main Journal UI" section (from "return (" after showAuth check)
+// This includes the header, navigation, and all three tabs
+
+return (
+  <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-yellow-50">
+    <div className="container mx-auto px-4 py-6 md:py-8 max-w-5xl">
+      {/* Header with logout */}
+      <div className="mb-6 md:mb-8">
+        <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg p-4 md:p-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center justify-center md:justify-start">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-3 shadow-md">
+                <span className="text-white font-bold text-lg">ॐ</span>
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-yellow-600 bg-clip-text text-transparent">
+                  Mindful Journal
+                </h1>
+                <p className="text-xs md:text-sm text-gray-600">
+                  {currentUser && `Welcome, ${currentUser.username}`}
+                </p>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              {currentUser && (<span className="text-sm text-gray-600">Welcome, {currentUser.username ?? 'Guest'}</span>)}
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center px-4 py-2 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-300 font-medium border border-gray-200 hover:border-orange-300"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Tabs */}
+      <div className="flex justify-center mb-6 md:mb-8">
+        <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg p-1.5 inline-flex">
+          <button 
+            onClick={() => setActiveTab('write')}
+            className={`px-4 md:px-6 py-2.5 rounded-xl flex items-center font-semibold text-sm md:text-base transition-all duration-300 ${
+              activeTab === 'write' 
+                ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-md transform scale-105' 
+                : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50'
+            }`}
+          >
+            <MessageCircle className="w-4 h-4 mr-2" />
+            <span className="hidden sm:inline">Write</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('journey')}
+            className={`px-4 md:px-6 py-2.5 rounded-xl flex items-center font-semibold text-sm md:text-base transition-all duration-300 ${
+              activeTab === 'journey' 
+                ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-md transform scale-105' 
+                : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50'
+            }`}
+          >
+            <BookOpen className="w-4 h-4 mr-2" />
+            <span className="hidden sm:inline">Journey</span>
+            <span className="ml-1.5 bg-white/30 px-2 py-0.5 rounded-full text-xs">
+              {journalHistory.length}
+            </span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('insights')}
+            className={`px-4 md:px-6 py-2.5 rounded-xl flex items-center font-semibold text-sm md:text-base transition-all duration-300 ${
+              activeTab === 'insights' 
+                ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-md transform scale-105' 
+                : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50'
+            }`}
+          >
+            <TrendingUp className="w-4 h-4 mr-2" />
+            <span className="hidden sm:inline">Insights</span>
+          </button>
+        </div>
+      </div>
+
+      {/* WRITE TAB */}
+      {activeTab === 'write' && (
+        <div className="space-y-6">
+          {/* AI Response */}
+          {aiResponse && (
+            <div className="bg-gradient-to-br from-white to-orange-50 rounded-2xl shadow-xl border-2 border-orange-200 p-6 transform hover:scale-[1.01] transition-transform duration-300">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 via-pink-500 to-red-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg animate-pulse">
+                  <span className="text-white font-bold text-lg">ॐ</span>
+                </div>
+                <div className="flex-1">
+                  <div className="prose prose-orange max-w-none">
+                    <p className="text-gray-800 leading-relaxed whitespace-pre-line mb-0 text-base md:text-lg">
+                      {aiResponse}
+                    </p>
+                  </div>
+                  {showInsightOption && (
+                    <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                      <button
+                        onClick={provideInsight}
+                        className="px-5 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl hover:from-orange-600 hover:to-pink-600 flex items-center justify-center font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                      >
+                        <Lightbulb className="w-5 h-5 mr-2" />
+                        Yes, give Sri Sri's insight
+                      </button>
+                      <button
+                        onClick={() => setShowInsightOption(false)}
+                        className="px-5 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 font-semibold transition-all duration-300"
+                      >
+                        Not now
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Mood Selector */}
+          <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-200 p-6 transform hover:shadow-xl transition-all duration-300">
+            <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <Clock className="w-6 h-6 mr-3 text-orange-600" />
+              How are you feeling right now?
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {moods.map((mood) => (
+                <button
+                  key={mood.value}
+                  onClick={() => setCurrentMood(mood.value)}
+                  className={`px-4 py-2.5 rounded-xl text-sm md:text-base font-medium transition-all duration-300 transform hover:scale-105 ${
+                    currentMood === mood.value 
+                      ? mood.color + ' ring-2 ring-orange-400 shadow-md scale-105' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {mood.label}
+                </button>
+              ))}
+              {currentMood && (
+                <button
+                  onClick={() => setCurrentMood('')}
+                  className="px-4 py-2.5 rounded-xl text-sm md:text-base bg-red-100 text-red-600 hover:bg-red-200 font-medium transition-all duration-300 transform hover:scale-105"
+                >
+                  ✕ Clear
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Journal Entry Box */}
+          <div className="bg-gradient-to-br from-white to-yellow-50 rounded-2xl shadow-xl border-2 border-yellow-200 p-6 transform hover:shadow-2xl transition-all duration-300">
+            <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <User className="w-6 h-6 mr-3 text-orange-600" />
+              What's on your mind today?
+            </h3>
+            <textarea
+              value={journalEntry}
+              onChange={(e) => setJournalEntry(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Share whatever is in your heart..."
+              className="w-full h-48 md:h-56 p-4 border-2 border-gray-200 rounded-xl resize-none focus:ring-4 focus:ring-orange-300 focus:border-orange-400 transition-all duration-300 text-base md:text-lg bg-white/50 backdrop-blur-sm"
+            />
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-4">
+              <span className="text-sm text-gray-600 font-medium">
+                {journalEntry.length} characters • Press Ctrl+Enter to submit
+              </span>
               <button
-                onClick={handleLogout}
-                className="flex items-center px-3 py-1.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={handleSubmit}
+                disabled={!journalEntry.trim() || isLoading}
+                className="w-full sm:w-auto flex items-center justify-center px-8 py-3 bg-gradient-to-r from-orange-500 via-pink-500 to-yellow-500 text-white rounded-xl hover:from-orange-600 hover:via-pink-600 hover:to-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
               >
-                <LogOut className="w-4 h-4 mr-1" />
-                Sign Out
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin w-5 h-5 border-3 border-white border-t-transparent rounded-full mr-2"></div>
+                    Reflecting...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5 mr-2" />
+                    Share
+                  </>
+                )}
               </button>
             </div>
           </div>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            A space for reflection, guided by timeless wisdom
-          </p>
         </div>
+      )}
 
-        {/* Navigation */}
-        <div className="flex justify-center mb-8">
-          <div className="flex bg-white rounded-lg shadow-sm border">
-            <button 
-              onClick={() => setActiveTab('write')}
-              className={`px-6 py-2 rounded-l-lg flex items-center ${activeTab === 'write' ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-50'}`}
-            >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Write
-            </button>
-            <button 
-              onClick={() => setActiveTab('journey')}
-              className={`px-6 py-2 flex items-center ${activeTab === 'journey' ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-50'}`}
-            >
-              <BookOpen className="w-4 h-4 mr-2" />
-              Journey ({journalHistory.length})
-            </button>
-            <button 
-              onClick={() => setActiveTab('insights')}
-              className={`px-6 py-2 rounded-r-lg flex items-center ${activeTab === 'insights' ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-50'}`}
-            >
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Analytics {journalHistory.length >= 5 ? '' : `(${5 - journalHistory.length} more needed)`}
-            </button>
+      {/* JOURNEY TAB */}
+      {activeTab === 'journey' && (
+        <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+          <div className="bg-gradient-to-r from-orange-500 to-pink-500 p-6 md:p-8">
+            <h3 className="text-2xl md:text-3xl font-bold text-white flex items-center">
+              <BookOpen className="w-7 h-7 mr-3" />
+              Your Journey
+            </h3>
+            <p className="text-white/90 mt-2 text-sm md:text-base">
+              {journalHistory.length} entries written with mindfulness
+            </p>
+          </div>
+          <div className="divide-y divide-gray-200 max-h-[600px] overflow-y-auto">
+            {journalHistory.length === 0 ? (
+              <div className="p-12 md:p-16 text-center">
+                <Heart className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-6 text-gray-300" />
+                <h4 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">Start Your Journey</h4>
+                <p className="text-gray-600 text-base md:text-lg">Your first entry awaits...</p>
+              </div>
+            ) : (
+              journalHistory.map((entry) => (
+                <div key={entry.id} className="p-6 md:p-8 hover:bg-orange-50 transition-colors duration-300">
+                  <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-4">
+                    <div className="text-sm md:text-base text-gray-600 font-medium">
+                      {entry.dayOfWeek}, {entry.date} at {entry.time}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {entry.mood && (
+                        <span className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium ${
+                          moods.find(m => m.value === entry.mood)?.color || 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {moods.find(m => m.value === entry.mood)?.label || entry.mood}
+                        </span>
+                      )}
+                      {entry.analysis?.sentiment && (
+                        <span className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium ${
+                          entry.analysis.sentiment === 'positive' ? 'bg-green-100 text-green-800' :
+                          entry.analysis.sentiment === 'negative' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {entry.analysis.sentiment}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <User className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl shadow-sm">
+                        <p className="text-gray-800 text-base md:text-lg leading-relaxed">{entry.entry}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
+                        <span className="text-white font-bold text-sm">ॐ</span>
+                      </div>
+                      <div className="flex-1 bg-gradient-to-br from-orange-50 to-pink-50 p-4 rounded-xl shadow-sm border border-orange-200">
+                        <p className="text-gray-800 whitespace-pre-line text-base md:text-lg leading-relaxed">{entry.guidance}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
+      )}
 
-        {activeTab === 'write' && (
-          <div className="space-y-6">
-            {/* Current Conversation */}
-            {aiResponse && (
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-sm">ॐ</span>
+      {/* INSIGHTS TAB */}
+      {activeTab === 'insights' && (
+        <div className="space-y-6">
+          {journalHistory.length < 5 ? (
+            <div className="bg-gradient-to-br from-white to-orange-50 rounded-2xl shadow-xl border-2 border-orange-200 p-8 md:p-12 text-center">
+              <div className="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-orange-500 via-pink-500 to-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg animate-pulse">
+                <span className="text-white font-bold text-3xl md:text-4xl">ॐ</span>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Patience, Dear Soul</h3>
+              <p className="text-gray-600 mb-6 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                Analytics become available after 5 journal entries, allowing for meaningful insights into your journey.
+              </p>
+              <div className="flex justify-center items-center space-x-3 mb-6">
+                {[...Array(5)].map((_, i) => (
+                  <div 
+                    key={i} 
+                    className={`w-4 h-4 md:w-5 md:h-5 rounded-full transition-all duration-500 ${
+                      i < journalHistory.length 
+                        ? 'bg-gradient-to-br from-orange-500 to-pink-500 shadow-lg scale-110' 
+                        : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+              <p className="text-base md:text-lg font-semibold text-gray-700 mb-8">
+                {journalHistory.length}/5 entries • {5 - journalHistory.length} more to unlock insights
+              </p>
+              <div className="bg-gradient-to-r from-orange-100 to-yellow-100 p-6 rounded-2xl border-2 border-orange-300">
+                <p className="text-base md:text-lg text-orange-900 italic font-medium">
+                  "The quality of our life depends on the quality of our thoughts."
+                  <br />
+                  <span className="text-sm md:text-base">— Sri Sri Ravi Shankar</span>
+                </p>
+              </div>
+            </div>
+          ) : stats ? (
+            <>
+              {/* Timeframe Selector */}
+              <div className="flex justify-center">
+                <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg p-1.5 inline-flex">
+                  {[
+                    { value: 'week', label: 'This Week' },
+                    { value: 'month', label: 'This Month' },
+                    { value: 'all', label: 'All Time' }
+                  ].map((timeframe) => (
+                    <button
+                      key={timeframe.value}
+                      onClick={() => setSelectedTimeframe(timeframe.value)}
+                      className={`px-4 md:px-6 py-2.5 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                        selectedTimeframe === timeframe.value 
+                          ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-md transform scale-105' 
+                          : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50'
+                      }`}
+                    >
+                      {timeframe.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-lg p-6 md:p-8 text-center transform hover:scale-105 transition-all duration-300 border-2 border-green-200">
+                  <Activity className="w-10 h-10 md:w-12 md:h-12 text-green-600 mx-auto mb-3" />
+                  <div className="text-3xl md:text-4xl font-bold text-green-600 mb-2">
+                    {Math.round((stats.sentimentCounts.positive / stats.totalEntries) * 100)}%
                   </div>
-                  <div className="flex-1">
-                    <div className="prose prose-orange max-w-none">
-                      <p className="text-gray-700 leading-relaxed whitespace-pre-line mb-0">
-                        {aiResponse}
-                      </p>
-                    </div>
-                    {showInsightOption && (
-                      <div className="mt-4 flex gap-3">
-                        <button
-                          onClick={provideInsight}
-                          className="px-4 py-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 flex items-center"
-                        >
-                          <Lightbulb className="w-4 h-4 mr-2" />
-                          Yes, give Sri Sri's insight
-                        </button>
-                        <button
-                          onClick={() => setShowInsightOption(false)}
-                          className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
-                        >
-                          Not now
-                        </button>
+                  <div className="text-sm md:text-base text-gray-700 font-semibold">Positive Entries</div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-100 rounded-2xl shadow-lg p-6 md:p-8 text-center transform hover:scale-105 transition-all duration-300 border-2 border-blue-200">
+                  <TrendingUp className="w-10 h-10 md:w-12 md:h-12 text-blue-600 mx-auto mb-3" />
+                  <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2 capitalize">
+                    {stats.improvementTrend}
+                  </div>
+                  <div className="text-sm md:text-base text-gray-700 font-semibold">Emotional Trend</div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-orange-50 to-yellow-100 rounded-2xl shadow-lg p-6 md:p-8 text-center transform hover:scale-105 transition-all duration-300 border-2 border-orange-200">
+                  <BarChart3 className="w-10 h-10 md:w-12 md:h-12 text-orange-600 mx-auto mb-3" />
+                  <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-2 capitalize">
+                    {stats.topConcern}
+                  </div>
+                  <div className="text-sm md:text-base text-gray-700 font-semibold">Top Focus Area</div>
+                </div>
+              </div>
+
+              {/* Life Areas Chart */}
+              <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 p-6 md:p-8">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 md:mb-8 flex items-center">
+                  <PieChart className="w-6 h-6 md:w-7 md:h-7 mr-3 text-orange-600" />
+                  Life Areas Analysis ({stats.totalEntries} entries)
+                </h3>
+                
+                <div className="space-y-5 md:space-y-6">
+                  {Object.entries(stats.categories).map(([category, score]) => (
+                    <div key={category} className="group">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-base md:text-lg text-gray-800 capitalize font-bold">
+                          {category}
+                        </span>
+                        <span className="text-base md:text-lg font-bold text-gray-800">
+                          {score}/10
+                        </span>
                       </div>
+                      <div className="flex items-center space-x-3">
+                        <div className="flex-1 bg-gray-200 rounded-full h-4 md:h-5 overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full transition-all duration-700 ease-out ${
+                              category === 'relationship' ? 'bg-gradient-to-r from-pink-400 to-pink-600' :
+                              category === 'money' ? 'bg-gradient-to-r from-green-400 to-green-600' :
+                              category === 'health' ? 'bg-gradient-to-r from-blue-400 to-blue-600' :
+                              category === 'education' ? 'bg-gradient-to-r from-purple-400 to-purple-600' :
+                              'bg-gradient-to-r from-orange-400 to-orange-600'
+                            } group-hover:shadow-lg`}
+                            style={{width: `${(score/10)*100}%`}}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Insights Summary */}
+                <div className="mt-8 p-6 bg-gradient-to-br from-orange-50 via-yellow-50 to-pink-50 rounded-2xl border-2 border-orange-300 shadow-lg">
+                  <h4 className="font-bold text-orange-900 mb-4 text-lg md:text-xl flex items-center">
+                    <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mr-3 shadow-md">
+                      <span className="text-white font-bold text-sm">ॐ</span>
+                    </div>
+                    Insights from Sri Sri's Wisdom
+                  </h4>
+                  <div className="text-sm md:text-base text-gray-800 space-y-2 leading-relaxed">
+                    <p>• Your journal shows most focus on <strong className="text-orange-700">{stats.topConcern}</strong></p>
+                    <p>• Overall sentiment is <strong className="text-orange-700">{stats.sentiment}</strong> with a <strong className="text-orange-700">{stats.improvementTrend}</strong> trend</p>
+                    <p>• {stats.sentimentCounts.positive} positive, {stats.sentimentCounts.neutral} neutral, {stats.sentimentCounts.negative} challenging entries</p>
+                    {stats.improvementTrend === 'improving' && (
+                      <p className="text-green-700 font-semibold">• 🌟 You're showing beautiful growth - keep reflecting!</p>
+                    )}
+                    {stats.improvementTrend === 'stable' && (
+                      <p className="text-blue-700 font-semibold">• 🌿 Your emotional balance is steady - a sign of inner peace</p>
                     )}
                   </div>
                 </div>
               </div>
-            )}
-
-            {/* Mood Selector */}
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
-                <Clock className="w-5 h-5 mr-2 text-orange-600" />
-                How are you feeling right now?
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {moods.map((mood) => (
-                  <button
-                    key={mood.value}
-                    onClick={() => setCurrentMood(mood.value)}
-                    className={`px-3 py-2 rounded-full text-sm transition-colors ${
-                      currentMood === mood.value 
-                        ? mood.color + ' ring-2 ring-orange-300' 
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {mood.label}
-                  </button>
-                ))}
-                {currentMood && (
-                  <button
-                    onClick={() => setCurrentMood('')}
-                    className="px-3 py-2 rounded-full text-sm bg-gray-200 text-gray-600 hover:bg-gray-300"
-                  >
-                    ✕ Clear
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Journal Entry */}
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
-                <User className="w-5 h-5 mr-2 text-orange-600" />
-                What's on your mind today?
-              </h3>
-              <textarea
-                value={journalEntry}
-                onChange={(e) => setJournalEntry(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Share whatever is in your heart..."
-                className="w-full h-40 p-4 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-orange-300 focus:border-transparent"
-              />
-              <div className="flex justify-between items-center mt-4">
-                <span className="text-sm text-gray-500">
-                  {journalEntry.length} characters • Press Ctrl+Enter to submit
-                </span>
-                <button
-                  onClick={handleSubmit}
-                  disabled={!journalEntry.trim() || isLoading}
-                  className="flex items-center px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                      Reflecting...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4 mr-2" />
-                      Share
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'journey' && (
-          <div className="bg-white rounded-lg shadow-sm border">
-            <div className="p-6 border-b">
-              <h3 className="text-lg font-medium text-gray-800 flex items-center">
-                <BookOpen className="w-5 h-5 mr-2 text-orange-600" />
-                Your Journey
-              </h3>
-            </div>
-            <div className="divide-y max-h-96 overflow-y-auto">
-              {journalHistory.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">
-                  <Heart className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                  <p>Your journey starts with your first entry.</p>
-                </div>
-              ) : (
-                journalHistory.map((entry) => (
-                  <div key={entry.id} className="p-6">
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="text-sm text-gray-500">
-                        {entry.dayOfWeek}, {entry.date} at {entry.time}
-                      </div>
-                      <div className="flex gap-2">
-                        {entry.mood && (
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            moods.find(m => m.value === entry.mood)?.color || 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {moods.find(m => m.value === entry.mood)?.label || entry.mood}
-                          </span>
-                        )}
-                        {entry.analysis?.sentiment && (
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            entry.analysis.sentiment === 'positive' ? 'bg-green-100 text-green-800' :
-                            entry.analysis.sentiment === 'negative' ? 'bg-red-100 text-red-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {entry.analysis.sentiment}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <User className="w-4 h-4 text-blue-600" />
-                        </div>
-                        <div className="flex-1 bg-blue-50 p-3 rounded-lg">
-                          <p className="text-gray-800">{entry.entry}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start space-x-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-white font-bold text-xs">ॐ</span>
-                        </div>
-                        <div className="flex-1 bg-orange-50 p-3 rounded-lg">
-                          <p className="text-gray-700 whitespace-pre-line">{entry.guidance}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'insights' && (
-          <div className="space-y-6">
-            {journalHistory.length < 5 ? (
-              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-bold text-2xl">ॐ</span>
-                </div>
-                <h3 className="text-lg font-medium text-gray-800 mb-2">Patience, Dear Soul</h3>
-                <p className="text-gray-600 mb-4">
-                  Analytics become available after 5 journal entries, allowing for meaningful insights into your journey.
-                </p>
-                <div className="flex justify-center items-center space-x-2 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <div 
-                      key={i} 
-                      className={`w-3 h-3 rounded-full ${
-                        i < journalHistory.length ? 'bg-orange-500' : 'bg-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <p className="text-sm text-gray-500">
-                  {journalHistory.length}/5 entries completed • {5 - journalHistory.length} more to go
-                </p>
-                <div className="mt-6 p-4 bg-orange-50 rounded-lg">
-                  <p className="text-sm text-orange-800 italic">
-                    "The quality of our life depends on the quality of our thoughts." - Sri Sri Ravi Shankar
-                  </p>
-                </div>
-              </div>
-            ) : stats ? (
-              <>
-                {/* Rest of analytics content */}
-                <div className="flex justify-center">
-                  <div className="flex bg-white rounded-lg shadow-sm border">
-                    {[
-                      { value: 'week', label: 'This Week' },
-                      { value: 'month', label: 'This Month' },
-                      { value: 'all', label: 'All Time' }
-                    ].map((timeframe) => (
-                      <button
-                        key={timeframe.value}
-                        onClick={() => setSelectedTimeframe(timeframe.value)}
-                        className={`px-4 py-2 ${timeframe.value === 'week' ? 'rounded-l-lg' : timeframe.value === 'all' ? 'rounded-r-lg' : ''} ${
-                          selectedTimeframe === timeframe.value ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        {timeframe.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-                    <Activity className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-green-600 mb-1">
-                      {Math.round((stats.sentimentCounts.positive / stats.totalEntries) * 100)}%
-                    </div>
-                    <div className="text-sm text-gray-600">Positive Entries</div>
-                  </div>
-                  
-                  <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-                    <TrendingUp className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-blue-600 mb-1 capitalize">
-                      {stats.improvementTrend}
-                    </div>
-                    <div className="text-sm text-gray-600">Trend</div>
-                  </div>
-                  
-                  <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-                    <BarChart3 className="w-8 h-8 text-orange-600 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-orange-600 mb-1 capitalize">
-                      {stats.topConcern}
-                    </div>
-                    <div className="text-sm text-gray-600">Top Focus Area</div>
-                  </div>
-                </div>
-
-                {/* Interactive Life Areas Chart */}
-                <div className="bg-white rounded-lg shadow-sm border p-6">
-                  <h3 className="text-lg font-medium text-gray-800 mb-6 flex items-center">
-                    <PieChart className="w-5 h-5 mr-2 text-orange-600" />
-                    Life Areas Analysis ({stats.totalEntries} entries)
-                  </h3>
-                  
-                  <div className="space-y-4">
-                    {Object.entries(stats.categories).map(([category, score]) => (
-                      <div key={category} className="flex items-center space-x-4">
-                        <div className="w-24 text-sm text-gray-700 capitalize font-medium">
-                          {category}
-                        </div>
-                        <div className="flex-1 flex items-center space-x-3">
-                          <div className="flex-1 bg-gray-200 rounded-full h-3">
-                            <div 
-                              className={`h-3 rounded-full transition-all duration-500 ${
-                                category === 'relationship' ? 'bg-pink-500' :
-                                category === 'money' ? 'bg-green-500' :
-                                category === 'health' ? 'bg-blue-500' :
-                                category === 'education' ? 'bg-purple-500' :
-                                'bg-orange-500'
-                              }`}
-                              style={{width: `${(score/10)*100}%`}}
-                            ></div>
-                          </div>
-                          <div className="text-sm font-semibold text-gray-800 w-8">
-                            {score}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Insights Summary */}
-                  <div className="mt-6 p-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg border border-orange-200">
-                    <h4 className="font-medium text-orange-800 mb-2 flex items-center">
-                      <div className="w-5 h-5 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-2">
-                        <span className="text-white font-bold text-xs">ॐ</span>
-                      </div>
-                      Insights from Sri Sri's Wisdom
-                    </h4>
-                    <div className="text-sm text-gray-700 space-y-1">
-                      <p>• Your journal shows most focus on <strong>{stats.topConcern}</strong></p>
-                      <p>• Overall sentiment is <strong>{stats.sentiment}</strong> with a <strong>{stats.improvementTrend}</strong> trend</p>
-                      <p>• {stats.sentimentCounts.positive} positive, {stats.sentimentCounts.neutral} neutral, {stats.sentimentCounts.negative} challenging entries</p>
-                      {stats.improvementTrend === 'improving' && <p>• 🌟 You're showing beautiful growth - keep reflecting!</p>}
-                      {stats.improvementTrend === 'stable' && <p>• 🌿 Your emotional balance is steady - a sign of inner peace</p>}
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-                <TrendingUp className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p className="text-gray-500 mb-2">Continue journaling to unlock deeper insights.</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+            </>
+          ) : null}
+        </div>
+      )}
     </div>
-  );
+  </div>
+);
 };
 
 export default AIJournalingTool;
