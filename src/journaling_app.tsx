@@ -542,7 +542,7 @@ if (showAuth) {
             </div>
             
             <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-yellow-600 bg-clip-text text-transparent mb-2">
-              Mindful Journal
+              InnerCord
             </h1>
             <p className="text-orange-600 font-semibold text-sm mb-2">Inspired by Art of Living</p>
             <p className="text-gray-600 text-sm">Your sacred space for reflection and wisdom</p>
@@ -709,7 +709,7 @@ return (
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-yellow-600 bg-clip-text text-transparent">
-                  Mindful Journal
+                  InnerCord
                 </h1>
                 <p className="text-xs md:text-sm text-gray-600">
                   {currentUser && `Welcome, ${currentUser.username}`}
