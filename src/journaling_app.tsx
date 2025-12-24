@@ -671,7 +671,7 @@ if (showAuth) {
               <div className="w-5 h-5 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center mr-2 shadow">
                 <span className="text-white font-bold text-xs">ॐ</span>
               </div>
-              <span className="font-semibold text-gray-700 text-sm">Art of Living Foundation</span>
+              <span className="font-semibold text-gray-700 text-sm">InnerCord MTU</span>
             </div>
             <p className="text-gray-500 text-xs leading-relaxed max-w-sm mx-auto">
               Your journal entries are stored securely and privately. 
